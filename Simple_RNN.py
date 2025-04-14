@@ -43,3 +43,23 @@ class LSTM(nn.Module):
         final_output = self.output_layer(h1)
 
         return final_output
+
+
+def predict(model, valid_dataloader):
+
+    sigmoid = nn.Sigmoid()
+
+    total_correct = 0
+    total_examples = len(valid_dataloader.dataset)
+
+    for (x, x_lengths), y in valid_dataloader:
+        
+        output = sigmoid(model(x, x_lengths))
+        
+        for i in range(output.shape[0]):
+            if (output[i] < 0.5 and y[i] == 0) or (output[i] >= 0.5 and y[i] == 1):
+                total_correct += 1
+
+    accuracy = total_correct / total_examples
+    print('accuracy: {}'.format(accuracy))
+    return accuracy
