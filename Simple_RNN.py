@@ -64,7 +64,16 @@ def predict(model, valid_dataloader):
     print("accuracy: {}".format(accuracy))
     return accuracy
 
-def train_lstm_classification(model, train_dataset, valid_dataset, epochs=10, batch_size=32, learning_rate=.001, print_frequency=25):
+
+def train_lstm_classification(
+    model,
+    train_dataset,
+    valid_dataset,
+    epochs=10,
+    batch_size=32,
+    learning_rate=0.001,
+    print_frequency=25,
+):
 
     criteria = nn.BCEWithLogitsLoss()
     optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)
@@ -73,25 +82,31 @@ def train_lstm_classification(model, train_dataset, valid_dataset, epochs=10, ba
     batch_size = batch_size
     print_frequency = print_frequency
 
-    #We'll create an instance of a torch dataloader to collate our data. This class handles batching and shuffling (should be done each epoch)
-    train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=False)
-    valid_dataloader = torch.utils.data.DataLoader(valid_dataset, batch_size=128, shuffle=False)
+    # We'll create an instance of a torch dataloader to collate our data. This class handles batching and shuffling (should be done each epoch)
+    train_dataloader = torch.utils.data.DataLoader(
+        train_dataset, batch_size=batch_size, shuffle=False
+    )
+    valid_dataloader = torch.utils.data.DataLoader(
+        valid_dataset, batch_size=128, shuffle=False
+    )
 
-    print('Total train batches: {}'.format(train_dataset.__len__() / batch_size))
+    print("Total train batches: {}".format(train_dataset.__len__() / batch_size))
 
     best_accuracy = 0.0
     best_model_sd = None
 
     for i in range(epochs):
-        print('### Epoch: ' + str(i+1) + ' ###')
-    
+        print("### Epoch: " + str(i + 1) + " ###")
+
         model.train()
 
         avg_loss = 0
 
         for step, data in enumerate(train_dataloader):
 
-            (x, x_lengths), y = data	# Our dataset is returning the input example x and also the lengths of the examples, so we'll unpack that here
+            (x, x_lengths), y = (
+                data  # Our dataset is returning the input example x and also the lengths of the examples, so we'll unpack that here
+            )
 
             optimizer.zero_grad()
 
@@ -105,14 +120,14 @@ def train_lstm_classification(model, train_dataset, valid_dataset, epochs=10, ba
             avg_loss += loss.item()
 
             if step % print_frequency == (print_frequency - 1):
-                print('epoch: {} batch: {} loss: {}'.format(
-                    i,
-                    step,
-                    avg_loss / print_frequency
-                ))
+                print(
+                    "epoch: {} batch: {} loss: {}".format(
+                        i, step, avg_loss / print_frequency
+                    )
+                )
                 avg_loss = 0
 
-        print('Evaluating...')
+        print("Evaluating...")
         model.eval()
         with torch.no_grad():
             acc = predict(model, valid_dataloader)
@@ -122,5 +137,6 @@ def train_lstm_classification(model, train_dataset, valid_dataset, epochs=10, ba
 
     return model.state_dict(), best_model_sd
 
-#model = LSTMModel(embedding_matrix, lstm_hidden_size=50, num_lstm_layers=2, bidirectional=True)
-#model, best_model = train_lstm_classification(model, train_dataset, valid_dataset, batch_size=128, epochs=1)
+
+# model = LSTMModel(embedding_matrix, lstm_hidden_size=50, num_lstm_layers=2, bidirectional=True)
+# model, best_model = train_lstm_classification(model, train_dataset, valid_dataset, batch_size=128, epochs=1)
