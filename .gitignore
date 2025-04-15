@@ -36,6 +36,7 @@ torch_cache/
 torch_models/
 tensorflow_datasets/
 spacy_data/
+models/
 
 # Temporary files and OS-specific files
 .DS_Store
