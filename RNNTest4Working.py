@@ -7,14 +7,16 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader, Dataset
 from nltk.tokenize import word_tokenize
+from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
 from tqdm import tqdm
+import csv
 
 # This was created by me (Tian) with help from DeepSeek, I made most of the LSTM Architecture and the Training Loop
-# and Deepseek helped me refine and debug those parts and also write the summarization and collate functions.
+# and Deepseek helped me refine and debug those parts and write the summarization and collate functions.
 # Will need help polishing and debugging and also writting and documenting
 
-# Load limited GloVe embeddings
-GLOVE_LIMIT = 20000  # Reduced vocabulary size
+# Load limited GloVe embeddings for performance and testing and preprocess words
+GLOVE_LIMIT = 150000  # Reduced vocabulary size
 glove_file = 'glove.6B.50d.txt'
 word2id = {'<pad>': 0, '<unk>': 1}
 embedding_matrix = []
@@ -33,7 +35,10 @@ with open(glove_file, 'r', encoding='utf-8') as f:
 
 embedding_matrix[1] = np.random.uniform(-0.1, 0.1, 50).astype('float32')
 
-# Optimized Dataset Class
+# Text Dataset class was made by using the Movie Dataset class from HW3 as a basis, 
+# DeepSeek helped me write the collate function for optimization and speed when 
+# processing data. The rest of the structure was coded by me with DeepSeek debugging 
+
 class TextDataset(Dataset):
     def __init__(self, csv_file, word2id, max_length=64, sample_size=5000):
         self.df = pd.read_csv(csv_file, usecols=['Text']).sample(sample_size)
@@ -55,6 +60,7 @@ class TextDataset(Dataset):
     def __getitem__(self, idx):
         return self.data[idx]
 
+# This function was made by DeepSeek for optimization and Performance when processing
 def collate_fn(batch):
     inputs, lengths = zip(*batch)
     sorted_idx = np.argsort(lengths)[::-1]
@@ -67,7 +73,8 @@ def collate_fn(batch):
         padded[i, :len(seq)] = torch.tensor(seq, dtype=torch.long)
     return padded, torch.tensor(sorted_lengths, dtype=torch.long)
 
-# Fixed Model Architecture
+
+# Simple forward LSTM architecture made by me using HW3 as a basis
 class SummarizationLSTM(nn.Module):
     def __init__(self, embedding_matrix, hidden_size=32):
         super().__init__()
@@ -79,23 +86,25 @@ class SummarizationLSTM(nn.Module):
         self.lstm = nn.LSTM(50, hidden_size, batch_first=True)
         self.fc = nn.Linear(hidden_size, len(word2id))
         
-    def forward(self, x, lengths):
-        embedded = self.embedding(x)
-        packed = nn.utils.rnn.pack_padded_sequence(
+    def forward(self, inputs, lengths):
+        embedded = self.embedding(inputs)
+        packed = pack_padded_sequence(
             embedded, lengths.cpu(), batch_first=True, enforce_sorted=False)
         output, _ = self.lstm(packed)
         
         # Unpack and pad to original sequence length
-        output_unpacked, _ = nn.utils.rnn.pad_packed_sequence(
+        output_unpacked, _ = pad_packed_sequence(
             output, 
             batch_first=True,
-            total_length=x.size(1)  # Match input sequence length
+            total_length=inputs.size(1)  # Match input sequence length
         )
         return self.fc(output_unpacked)
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-def train_model(csv_file, batch_size=16, num_epochs=3):
+
+# Training model made using class RNN Seq labelling example and HW3
+def train_model(csv_file, batch_size=16, num_epochs=10):
     dataset = TextDataset(csv_file, word2id)
     
     dataloader = DataLoader(
@@ -105,6 +114,7 @@ def train_model(csv_file, batch_size=16, num_epochs=3):
         num_workers=0
     )
     
+    # 
     model = SummarizationLSTM(embedding_matrix).to(device)
     optimizer = optim.Adam(model.parameters(), lr=0.001)
     criterion = nn.CrossEntropyLoss(ignore_index=0)
@@ -134,6 +144,7 @@ def train_model(csv_file, batch_size=16, num_epochs=3):
     
     return model
 
+# This function was mainly written by DeepSeek with me debugging and modifying chunks here and there
 def generate_summary(model, text, word2id, max_length=20):
     model.eval()
     tokens = word_tokenize(text.lower())[:64]
@@ -151,8 +162,27 @@ def generate_summary(model, text, word2id, max_length=20):
     id2word = {v: k for k, v in word2id.items()}
     return ' '.join([id2word.get(idx, '<unk>') for idx in preds if idx != 0])
 
+def process_reviews(csv_file_path, model, word2id):
+    # Open the CSV file
+    with open(csv_file_path, mode='r', encoding='utf-8') as file:
+        csv_reader = csv.DictReader(file)
+        
+        # Process each row 
+        for row in csv_reader:
+            # Get the review text
+            review_text = row['Review']
+            
+            # Generate summary for this review
+            summary = generate_summary(model, review_text, word2id)
+            
+            # Print or store the results as needed
+            print(f"Original Review: {review_text}")
+            print(f"Generated Summary: {summary}\n")
+            print("-" * 50)  # Separator for readability
+
 if __name__ == '__main__':
     model = train_model('Reviews.csv')
     
-    test_text = "This compact wireless speaker delivers excellent sound quality with impressive battery life."
-    print("Generated Summary:", generate_summary(model, test_text, word2id))
+    process_reviews('item1.csv', model, word2id)
+    process_reviews('item2.csv', model, word2id)
+    process_reviews('item3.csv', model, word2id)
