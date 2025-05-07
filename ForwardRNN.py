@@ -145,6 +145,9 @@ def train_model(csv_file, batch_size=16, num_epochs=10):
     return model
 
 # This function was mainly written by DeepSeek with me debugging and modifying chunks here and there
+# function predicts the most likely suquential token, then writes the summary by mapping the token
+# its word
+
 def generate_summary(model, text, word2id, max_length=20):
     model.eval()
     tokens = word_tokenize(text.lower())[:64]
