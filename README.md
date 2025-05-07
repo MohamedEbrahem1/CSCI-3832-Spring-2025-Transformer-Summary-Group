@@ -23,7 +23,7 @@ To specify what reviews you'd like to summarize,  call process reviews in this f
 by train_model("csv file") and the csv file that contains reviews that you'd like to summarize. There are already 3 item csvs files preincluded that was a test set that we used to test
 our trained models. 
 
-Mohamed Abdelmagid: T5 model run the t5_pretrained.ipynb file inside the archive folder. Create a models and data folder in the parent directory (../) and put the filtered_reviews.csv (or rename reviews.csv to that) in the data folder. Then run and train the model and you should get
+Mohamed Abdelmagid: T5 model run the t5_pretrained.ipynb file inside the notebooks folder. Create a models and data folder in the parent directory (../) and put the filtered_reviews.csv (or rename reviews.csv to that) in the data folder. Then run and train the model and you should get
 
 Initial Model Metrics:
 ROUGE-L (Initial pre-trained model): 0.0890
