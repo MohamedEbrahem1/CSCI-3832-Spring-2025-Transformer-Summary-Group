@@ -14,3 +14,5 @@ and there are example reviews randomly printed out in the final cell.
 Conda env: Python=3.10, datasets, evaluate, transformers=4.50, kagglehub=0.3.8, torch=2.6.0, rouge-score
 
 Tian Zhang: LSTM
+
+Mohamed: T5 model
