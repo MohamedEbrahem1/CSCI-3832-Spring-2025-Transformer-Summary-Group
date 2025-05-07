@@ -13,6 +13,6 @@ ROUGE-L (Fine-tuned model): 0.1335
 and there are example reviews randomly printed out in the final cell.
 Conda env: Python=3.10, datasets, evaluate, transformers=4.50, kagglehub=0.3.8, torch=2.6.0, rouge-score
 
-Tian Zhang: LSTM
+Tian Zhang: LSTM run the ForwardRNN.py file pass in the Reviews.csv file or FilteredReviews.csv file into the process_reviews function.
 
 Mohamed: T5 model
