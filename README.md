@@ -15,4 +15,16 @@ Conda env: Python=3.10, datasets, evaluate, transformers=4.50, kagglehub=0.3.8, 
 
 Tian Zhang: LSTM run the ForwardRNN.py file pass in the Reviews.csv file or FilteredReviews.csv file into the process_reviews function.
 
-Mohamed: T5 model
+Mohamed Abdelmagid: T5 model run the t5_pretrained.ipynb file. Create a models and data folder in the parent directory (../) and put the filtered_reviews.csv (or rename reviews.csv to that) in the data folder. Then run and train the model and you should get
+
+Initial Model Metrics:
+ROUGE-L (Initial pre-trained model): 0.0890
+BLEU (Initial pre-trained model): 0.0036
+METEOR (Initial pre-trained model): 0.1272
+
+Fine-tuned Model Metrics:
+ROUGE-L (Fine-tuned model): 0.1432
+BLEU (Fine-tuned model): 0.0000
+METEOR (Fine-tuned model): 0.0865
+
+and the final cell prints out examples.
