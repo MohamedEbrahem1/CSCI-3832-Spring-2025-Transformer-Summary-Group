@@ -3,6 +3,9 @@ Project for CSCI 3832 Spring 2025 involving making a transformer model to perfor
 
 Our 3 main models are the RNN, BART, and T5 models.
 
+Ryen Johnston: To prepare the data, first download Reviews.csv from https://www.kaggle.com/datasets/snap/amazon-fine-food-reviews and place it in the root directory. Then, run preprocesser.py. This will output a new csv called "FilteredReviews.csv" in the root directory.
+This file can be used for all models.
+
 Miles Zheng: To run the BART model use the bart_summarizer notebook, download the dataset from https://www.kaggle.com/datasets/snap/amazon-fine-food-reviews and move the kagglehub/datasets/snap/amazon-fine-food-reviews/versions/2/Reviews.csv into the same directory as the notebook. Then just run all cells, the model is trained with one cpu so it might take a while, the expected output is 
 
 Initial Model Metrics:
