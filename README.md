@@ -13,7 +13,12 @@ ROUGE-L (Fine-tuned model): 0.1335
 and there are example reviews randomly printed out in the final cell.
 Conda env: Python=3.10, datasets, evaluate, transformers=4.50, kagglehub=0.3.8, torch=2.6.0, rouge-score
 
-Tian Zhang: LSTM run the ForwardRNN.py file pass in the Reviews.csv file or FilteredReviews.csv file into the process_reviews function.
+Tian Zhang: LSTM run the ForwardRNN.py. file pass in the Reviews.csv file or FilteredReviews.csv file into the process_reviews function. i.e. in main, write model = train_model('Reviews.csv')
+This trains the model on the reviews dataset. This and the following step are all done in if __name__ == '__main__':
+
+To specify what reviews you'd like to summarize,  call process reviews in this fashion in main: process_reviews('item1.csv', model, word2id) with model being the model that was created
+by train_model("csv file") and the csv file that contains reviews that you'd like to summarize. There are already 3 item csvs files preincluded that was a test set that we used to test
+our trained models. 
 
 Mohamed Abdelmagid: T5 model run the t5_pretrained.ipynb file. Create a models and data folder in the parent directory (../) and put the filtered_reviews.csv (or rename reviews.csv to that) in the data folder. Then run and train the model and you should get
 
