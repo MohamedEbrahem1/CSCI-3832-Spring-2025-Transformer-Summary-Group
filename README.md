@@ -26,13 +26,13 @@ our trained models.
 Mohamed Abdelmagid: T5 model run the t5_pretrained.ipynb file inside the notebooks folder. Create a models and data folder in the parent directory (../) and put the filtered_reviews.csv (or rename reviews.csv to that) in the data folder. Then run and train the model and you should get
 
 Initial Model Metrics:
-ROUGE-L (Initial pre-trained model): 0.0890
-BLEU (Initial pre-trained model): 0.0036
-METEOR (Initial pre-trained model): 0.1272
+ROUGE-L (Initial pre-trained model): 0.1027
+BLEU (Initial pre-trained model): 0.0059
+METEOR (Initial pre-trained model): 0.1401
 
 Fine-tuned Model Metrics:
-ROUGE-L (Fine-tuned model): 0.1432
-BLEU (Fine-tuned model): 0.0000
-METEOR (Fine-tuned model): 0.0865
+ROUGE-L (Fine-tuned model): 0.1614
+BLEU (Fine-tuned model): 0.0289
+METEOR (Fine-tuned model): 0.0999
 
 and the final cell prints out examples.
