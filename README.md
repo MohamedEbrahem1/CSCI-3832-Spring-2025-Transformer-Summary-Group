@@ -81,4 +81,4 @@ All models include example review outputs in their final execution steps.
 - **Ryen Johnston**: Data preprocessing pipeline
 - **Miles Zheng**: BART implementation & optimization
 - **Tian Zhang**: RNN architecture & training
-- **Mohamed Abdelmagid**: T5 fine-tuning & evaluation
+- **Mohamed Abdelmagid**: T5 fine-tuning & evaluation + Formatting Workflow
