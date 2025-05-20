@@ -10,8 +10,9 @@ def load_balanced_reviews(csv_path):
     low_balanced = low.sample(n=n_samples, random_state=42)
     high_balanced = high.sample(n=n_samples, random_state=42)
     balanced_df = pd.concat([low_balanced, high_balanced]).sample(frac=1, random_state=42).reset_index(drop=True)
-    balanced_df.to_csv("FilteredReviews.csv", index=False)
+    balanced_df.to_csv(data_path + "FilteredReviews.csv", index=False)
     return balanced_df
 
 # Calls the function
-balanced_reviews = load_balanced_reviews('Reviews.csv')
+data_path = '../data/'
+balanced_reviews = load_balanced_reviews(data_path + 'Reviews.csv')

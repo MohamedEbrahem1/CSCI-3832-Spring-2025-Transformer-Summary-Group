@@ -184,8 +184,9 @@ def process_reviews(csv_file_path, model, word2id):
             print("-" * 50)  # Separator for readability
 
 if __name__ == '__main__':
-    model = train_model('Reviews.csv')
+    data_path = '../data/'
+    model = train_model(data_path + 'Reviews.csv')
     
-    process_reviews('item1.csv', model, word2id)
-    process_reviews('item2.csv', model, word2id)
-    process_reviews('item3.csv', model, word2id)
+    process_reviews(data_path + 'test_data/' + 'item1.csv', model, word2id)
+    process_reviews(data_path + 'test_data/' + 'item2.csv', model, word2id)
+    process_reviews(data_path + 'test_data/' + 'item3.csv', model, word2id)

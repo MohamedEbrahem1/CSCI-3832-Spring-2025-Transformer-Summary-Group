@@ -1,38 +1,84 @@
-# CSCI-3832-Spring-2025-Transformer-Summary-Group
-Project for CSCI 3832 Spring 2025 involving making a transformer model to perform summarization based on the overall reviews of food items from Amazon.
+# Amazon Food Review Summarization with Transformers
 
-Our 3 main models are the RNN, BART, and T5 models.
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-Ryen Johnston: To prepare the data, first download Reviews.csv from https://www.kaggle.com/datasets/snap/amazon-fine-food-reviews and place it in the root directory. Then, run preprocesser.py. This will output a new csv called "FilteredReviews.csv" in the root directory.
-This file can be used for all models.
+Transformer-based text summarization project for CSCI 3832 Spring 2025, analyzing Amazon Fine Food Reviews.
 
-Miles Zheng: To run the BART model use the bart_summarizer notebook, can download the dataset as a zip from https://www.kaggle.com/datasets/snap/amazon-fine-food-reviews or in the notebook there is some code that downloads the dataset. Then the kagglehub/datasets/snap/amazon-fine-food-reviews/versions/2/Reviews.csv into the same directory as the notebook. Then just run all cells, the model is trained with one cpu so it might take a while, the expected output is 
+## Table of Contents
+- [Project Overview](#project-overview)
+- [Dataset Preparation](#dataset-preparation)
+- [Models](#models)
+  - [RNN Model](#rnn-model)
+  - [BART Model](#bart-model)
+  - [T5 Model](#t5-model)
+- [Results](#results)
+- [Contributors](#contributors)
 
-Initial Model Metrics:
-ROUGE-L (Initial pre-trained model): 0.0711
-Fine-tuned Model Metrics:
-ROUGE-L (Fine-tuned model): 0.1335
+## Project Overview
+This project implements three different models for generating summary insights from Amazon food reviews:
+- **RNN** (Recurrent Neural Network)
+- **BART** (Bidirectional and Auto-Regressive Transformers)
+- **T5** (Text-to-Text Transfer Transformer)
 
-and there are example reviews randomly printed out in the final cell.
-Conda env: Python=3.10, datasets, evaluate, transformers=4.50, kagglehub=0.3.8, torch=2.6.0, rouge-score
+## Dataset Preparation
+1. Download dataset from [Kaggle](https://www.kaggle.com/datasets/snap/amazon-fine-food-reviews)
+2. Place `Reviews.csv` in data directory
+3. Run preprocessing script:
+```bash
+python preprocesser.py
+```
+Generates `FilteredReviews.csv` used by all models.
 
-Tian Zhang: LSTM run the ForwardRNN.py. file pass in the Reviews.csv file or FilteredReviews.csv file into the process_reviews function. i.e. in main, write model = train_model('Reviews.csv')
-This trains the model on the reviews dataset. This and the following step are all done in if __name__ == '__main__':
+## Models
 
-To specify what reviews you'd like to summarize,  call process reviews in this fashion in main: process_reviews('item1.csv', model, word2id) with model being the model that was created
-by train_model("csv file") and the csv file that contains reviews that you'd like to summarize. There are already 3 item csvs files preincluded that was a test set that we used to test
-our trained models. 
+### RNN Model
+**Implementation**: `ForwardRNN.py`
 
-Mohamed Abdelmagid: T5 model run the t5_pretrained.ipynb file inside the notebooks folder. Create a models and data folder in the parent directory (../) and put the filtered_reviews.csv (or rename reviews.csv to that) in the data folder. Then run and train the model and you should get
+### BART Model
+**Implementation**: `bart_summarizer.ipynb`
 
-Initial Model Metrics:
-ROUGE-L (Initial pre-trained model): 0.1027
-BLEU (Initial pre-trained model): 0.0059
-METEOR (Initial pre-trained model): 0.1401
+#### Requirements:
+```bash
+conda create -n bart_env python=3.10
+conda install pytorch=2.6.0 -c pytorch
+pip install transformers==4.50 datasets evaluate kagglehub==0.3.8 rouge-score
+```
 
-Fine-tuned Model Metrics:
-ROUGE-L (Fine-tuned model): 0.1614
-BLEU (Fine-tuned model): 0.0289
-METEOR (Fine-tuned model): 0.0999
+#### Execution:
+1. Place notebook in noptebooks directory
+2. Ensure dataset path: `kagglehub/datasets/snap/amazon-fine-food-reviews/versions/2/Reviews.csv`
+3. Run all notebook cells
 
-and the final cell prints out examples.
+### T5 Model
+**Implementation**: `notebooks/t5_pretrained.ipynb`
+
+#### Setup:
+```bash
+mkdir -p ../models ../data
+cp FilteredReviews.csv ../data/
+```
+
+#### Requirements:
+Same as BART model with additional space requirements for model caching
+
+## Results
+
+### BART Metrics
+| Metric          | Pre-trained | Fine-tuned |
+|-----------------|-------------|------------|
+| **ROUGE-L**     | 0.0711      | 0.1335     |
+
+### T5 Metrics
+| Metric          | Pre-trained | Fine-tuned |
+|-----------------|-------------|------------|
+| **ROUGE-L**     | 0.1027      | 0.1614     |
+| **BLEU**        | 0.0059      | 0.0289     |
+| **METEOR**      | 0.1401      | 0.0999     |
+
+All models include example review outputs in their final execution steps.
+
+## Contributors
+- **Ryen Johnston**: Data preprocessing pipeline
+- **Miles Zheng**: BART implementation & optimization
+- **Tian Zhang**: RNN architecture & training
+- **Mohamed Abdelmagid**: T5 fine-tuning & evaluation

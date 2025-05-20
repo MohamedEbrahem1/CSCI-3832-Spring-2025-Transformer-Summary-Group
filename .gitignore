@@ -12,7 +12,7 @@ logs/
 *.log
 
 # Dataset and model files
-data/
+# data/
 *.csv
 *.tsv
 *.json
@@ -28,7 +28,11 @@ data/
 *.npy
 *.npz
 *.tar.gz
-
+*.safetensors
+*.model
+*.pth
+*.bin
+*.txt
 # Transformer model caches (Hugging Face, TensorFlow, PyTorch)
 .cache/
 transformers_cache/
@@ -36,7 +40,7 @@ torch_cache/
 torch_models/
 tensorflow_datasets/
 spacy_data/
-models/
+# models/
 
 # Temporary files and OS-specific files
 .DS_Store
